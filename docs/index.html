@@ -6,6 +6,68 @@
     <title>메모 앱</title>
     <!-- favicon, og, css framework setting, ga, hostdog -->
     <style>
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Thin.woff2') format('woff2');
+        font-weight: 100;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-ExtraLight.woff2') format('woff2');
+        font-weight: 200;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Light.woff2') format('woff2');
+        font-weight: 300;
+        ont-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-SemiBold.woff2') format('woff2');
+        font-weight: 600;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2') format('woff2');
+        font-weight: 700;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-ExtraBold.woff2') format('woff2');
+        font-weight: 800;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Suit';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Heavy.woff2') format('woff2');
+        font-weight: 900;
+        font-display: swap;
+      }
       /* https://noonnu.cc/ */
       /* https://fonts.google.com/selection/embed */
       * {
@@ -15,6 +77,7 @@
         /* 100vh 설정 시 스크롤 생기는 이슈 해결 */
         margin: 0;
         padding: 0;
+        font-family: 'Suit', sans-serif;
       }
       /* https://flukeout.github.io/ */
       /* https://developer.mozilla.org/ko/docs/Web/CSS/Guides/Selectors */
@@ -40,6 +103,11 @@
         /* opacity -> 투명도. */
       }
     </style>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
     <div id="container">
