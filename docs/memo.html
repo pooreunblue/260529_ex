@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>메모를 남기자!</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
     <style>
       @font-face {
         font-family: 'Suit';
@@ -11,56 +24,48 @@
         font-weight: 100;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-ExtraLight.woff2') format('woff2');
         font-weight: 200;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Light.woff2') format('woff2');
         font-weight: 300;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
         font-weight: normal;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Medium.woff2') format('woff2');
         font-weight: 500;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-SemiBold.woff2') format('woff2');
         font-weight: 600;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Bold.woff2') format('woff2');
         font-weight: 700;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-ExtraBold.woff2') format('woff2');
         font-weight: 800;
         font-display: swap;
       }
-
       @font-face {
         font-family: 'Suit';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Heavy.woff2') format('woff2');
@@ -68,249 +73,343 @@
         font-display: swap;
       }
 
-      /* 전체 공통으로 작동해야하는 태그 수준의 서식 */
-      * {
-        box-sizing: border-box;
-      }
-
       body {
         margin: 0;
+        background-color: #f8f9fa;
         font-family: 'Suit', sans-serif;
       }
 
-      textarea {
-        resize: none;
-      }
-      /* 반복해서 쓰이는 내용은 클래스로 작성 */
-      .center {
+      .memo-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 100%;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        word-break: break-all;
+      }
+      
+      .memo-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+      }
+
+      .memo-text {
+        white-space: pre-wrap;
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: 200px;
+      }
+      
+      /* 커스텀 스크롤바 */
+      .memo-text::-webkit-scrollbar {
+        width: 6px;
+      }
+      .memo-text::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .memo-text::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 10px;
+      }
+
+      .btn-icon {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0 4px;
+        color: #adb5bd;
+        transition: all 0.2s;
+        display: inline-flex;
         align-items: center;
-      }
-      /* id로 특정하게 쓸 요소들에 대한 서식 */
-      /* id를 의미하는 선택자 # */
-      #page {
-        height: 100vh;
-        flex-direction: column;
+        justify-content: center;
       }
 
-      #container {
-        flex-direction: column;
-        gap: 12px;
+      .btn-icon:hover {
+        color: #495057;
+        transform: scale(1.1);
       }
 
-      #container h1 {
-        /* align, justify */
-        text-align: center;
+      .btn-icon.active-pin {
+        color: #dc3545; /* 고정 활성화 시 빨간색 */
       }
-
-      #memoWriter {
-        flex-direction: column;
-        gap: 8px;
-        background-color: beige;
-        padding: 16px;
-        border: 1px solid gray;
-        border-radius: 8px;
-        /* 원/타원 만들 때 */
-        /* border-radius: 50%; */
+      
+      .btn-icon.active-fav {
+        color: #ffc107; /* 즐겨찾기 활성화 시 노란색 */
       }
+      
+      /* 배경색 모음 */
+      .bg-memo-default { background-color: #ffffff; }
+      .bg-memo-pinned { background-color: #fff3cd; border-color: #ffe69c !important; }
+      .bg-memo-fav { background-color: #e0f7fa; border-color: #b2ebf2 !important; }
 
-      #memoWriter button {
-        padding: 6px 12px;
-        /* margin, padding : 전체 */
-        /* margin, padding : 위 아래 */
-        /* margin, padding : 위 오 아 왼 */
-      }
-
-      #memoList {
-        gap: 8px;
-        padding: 8px;
-        flex-wrap: wrap;
-      }
-
-      #memoList div {
-        width: 240px;
-        height: 160px;
-        border: 1px solid gray;
-        border-radius: 8px;
-        padding: 16px;
-        /* https://colorhunt.co/ */
-        background-color: #fff7c5;
+      .toast-container {
+        z-index: 1055;
       }
     </style>
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body>
-    <section id="page" class="center">
-      <section id="container" class="center">
-        <h1>메모를 남기자!</h1>
-        <a href="index.html">
-          <button>메인으로 가기</button>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4 sticky-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+          <i class="bi bi-journal-text me-2"></i>메모 앱
         </a>
-        <form id="memoWriter" class="center">
-          <!-- validation : 검증 -->
-          <!-- 프런트엔드/브라우저/화면에서의 검증은 모두 회피/조작 -->
-          <textarea name="memo" required></textarea>
-          <div>
-            <button>작성</button>
-            <!-- 폼 자체의 기능(submit)을 안쓰고 자체 click으로 기능을 하겠다 -->
-            <button id="resetBtn" type="button">리셋</button>
+        <div class="d-flex">
+          <a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+            <i class="bi bi-house-door me-1"></i>메인으로
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container pb-5">
+      <!-- Write Memo Section -->
+      <div class="row justify-content-center mb-5">
+        <div class="col-md-8 col-lg-6">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-4">
+              <h5 class="card-title fw-bold mb-3"><i class="bi bi-pencil-square me-2 text-primary"></i>새 메모 작성</h5>
+              <form id="memoWriter">
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" name="memo" id="memoTextarea" placeholder="메모를 입력하세요" style="height: 120px; resize: none;" required></textarea>
+                  <label for="memoTextarea" class="text-muted">이곳에 메모를 남겨보세요...</label>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                  <button type="button" id="resetBtn" class="btn btn-light px-4 rounded-pill">전체 삭제</button>
+                  <button type="submit" class="btn btn-primary px-4 shadow-sm rounded-pill"><i class="bi bi-check-lg me-1"></i>저장하기</button>
+                </div>
+              </form>
+            </div>
           </div>
-        </form>
-        <section id="memoList" class="center">
-          <!-- 작성된 메모를 배치 -->
-        </section>
-      </section>
-    </section>
+        </div>
+      </div>
+
+      <!-- Memo List Section -->
+      <h5 class="fw-bold mb-3"><i class="bi bi-card-list me-2"></i>내 메모</h5>
+      <div class="row g-4" id="memoList">
+        <!-- Memos will be generated here -->
+      </div>
+    </div>
+
+    <!-- Toast Notification for Copy -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="copyToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <i class="bi bi-check-circle me-2"></i>클립보드에 복사되었습니다!
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmxc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
       document.addEventListener("DOMContentLoaded", main);
 
-      // DOM 요소
       const memoWriter = document.querySelector("#memoWriter");
       const memoList = document.querySelector("#memoList");
       const resetBtn = document.querySelector("#resetBtn");
+      
+      let copyToastEl, copyToast;
 
-      // 진입점. entrypoint
       function main() {
-        console.log("DOM 로딩 완료");
+        // 기존 문자열 데이터를 객체 형태로 마이그레이션
+        migrateData();
+        
+        copyToastEl = document.getElementById('copyToast');
+        copyToast = new bootstrap.Toast(copyToastEl, { delay: 2000 });
+        
         memoWriter.addEventListener("submit", memoWriterHandler);
         resetBtn.addEventListener("click", () => {
-          // localStorage.clear();
-          // 현재 출처에 있는 모든 localStorage 데이터 X.
-          localStorage.removeItem("memo");
-          drawPrevMemo(); // 재렌더링.
+          if(confirm("모든 메모를 정말 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다.)")) {
+            localStorage.removeItem("memo");
+            drawPrevMemo();
+          }
         });
-        // 화면에 표시하면?
+        
         drawPrevMemo();
       }
 
-      // 1. 일단 함수표현식으로 타입추론을 하면서 작성한다음에
-      // 2. 나중에 꺼내서 아래에 배치
+      function migrateData() {
+        const memoObj = getPrevMemo();
+        let changed = false;
+        for (const key in memoObj) {
+          if (typeof memoObj[key] === "string") {
+            memoObj[key] = {
+              text: memoObj[key],
+              isPinned: false,
+              isFavorite: false
+            };
+            changed = true;
+          }
+        }
+        if (changed) {
+          localStorage.setItem("memo", JSON.stringify(memoObj));
+        }
+      }
+
       function memoWriterHandler(event) {
-        // form의 기본 이벤트를 금지/정지 시킨다
         event.preventDefault();
-        console.log("form 로직 시작");
         const formData = new FormData(event.target);
-        // console.log(formData);
-        // console.log(...formData);
         const memoText = formData.get("memo");
-        console.log(memoText);
-
-        // 데이터 추가 시 LocalStorage를 사용해서 영속성(persistence)
-        const id = saveMemo(memoText);
-
-        // 추가할 텍스트
-        // 내가 호출되었을 때의 스코프가 아니라 선언되었을 때의 스코프를 기억한다 -> 렉시컬 스코프
-        // memoList는 기억하는데 memoText 기억 X.
-        // drawMemoBox(memoText);
-        drawMemoBox(memoText, id);
-        // 삭제 때 쓰기 위해 id 전달
-
-        // const memoBox = document.createElement("div");
-        // // memoBox.classList.add
-        // memoBox.textContent = memoText;
-        // memoList.append(memoBox);
-
-        // 폼 리셋 (남은 폼의 인풋 입력 내역을 지워줌)
+        
+        saveMemo(memoText);
+        drawPrevMemo(); // 메모 작성 시 리스트 재정렬
         event.target.reset();
       }
 
-      //   특정한 텍스트를, 특정한 리스트에 구현해서 넣겠다
-      function drawMemoBox(memoText, id) {
-        const memoBox = document.createElement("div");
-        // memoBox.classList.add
-        memoBox.textContent = memoText;
-        memoList.append(memoBox);
-        // 삭제 로직
-        const rmBtn = document.createElement("button");
-        rmBtn.textContent = "삭제";
-        // 여기서 함수선언/표현을 하면 Lexical Scope로 바깥을 가져올 수 있다는 장점 (대신 관리가 어려워짐)
-        rmBtn.addEventListener("click", () => {
-          // localStorage 지우는게 필요
-          const memoObj = getPrevMemo();
-          //   delete memoObj[id];
-          console.log("memoId", id);
-          memoObj[id] = undefined; // JSON.stringfy 삭제 됨
-          localStorage.setItem("memo", JSON.stringify(memoObj));
-          // DOM만 지운 것
-          memoBox.remove();
-        });
-        // 복사 로직
-        const cpBtn = document.createElement("button");
-        cpBtn.textContent = "복사";
-        cpBtn.addEventListener("click", () => {
-          if (confirm("정말 복사하시겠습니까?")) {
-            navigator.clipboard.writeText(memoText);
-            alert("복사 완료");
-          }
-        });
-        memoBox.append(rmBtn);
-        memoBox.append(cpBtn);
+      function getPrevMemo() {
+        const prevMemo = localStorage.getItem("memo") ?? "{}";
+        try {
+          return JSON.parse(prevMemo);
+        } catch (err) {
+          return {};
+        }
       }
 
       function saveMemo(memoText) {
-        // 가장 최근 메모 1개만 저장하겠다
-        // localStorage.setItem("memo", memoText);
-        // localStorage.setItem("memo", []); // 삭제할 때 불편
-        // const prevMemo = localStorage.getItem("memo") ?? {};
-        // let memoObj;
-        // try {
-        //   // JSON text -> 객체
-        //   memoObj = JSON.parse(prevMemo);
-        //   // localStorage -> origin 공유
-        // } catch (err) {
-        //   console.log(err);
-        //   memoObj = {};
-        // }
         const memoObj = getPrevMemo();
-        // 현재 시간을 숫자로 표시한 값
         const timeKey = Date.now();
-        memoObj[timeKey] = memoText;
-        console.log(memoObj);
-        // localStorage는 문자열 key, value
-        // 제대로 된 문자열 '변환' -> JSON.stringify, parse
+        memoObj[timeKey] = {
+          text: memoText,
+          isPinned: false,
+          isFavorite: false
+        };
         localStorage.setItem("memo", JSON.stringify(memoObj));
-        // 생성 후 ID(Key) 값 리턴
         return timeKey;
       }
 
-      // 로직 분리
-      function getPrevMemo() {
-        // const prevMemo = localStorage.getItem("memo") ?? {};
-        const prevMemo = localStorage.getItem("memo") ?? "{}"; // 값이 없으면
-        console.log(prevMemo);
-        let memoObj;
-        try {
-          // JSON text -> 객체
-          memoObj = JSON.parse(prevMemo);
-          // localStorage -> origin 공유
-        } catch (err) {
-          console.log(err);
-          memoObj = {};
+      function updateMemoState(id, newState) {
+        const memoObj = getPrevMemo();
+        if(memoObj[id]) {
+          memoObj[id] = { ...memoObj[id], ...newState };
+          localStorage.setItem("memo", JSON.stringify(memoObj));
+          drawPrevMemo();
         }
-        return memoObj;
+      }
+
+      function deleteMemo(id) {
+        if(confirm("이 메모를 삭제하시겠습니까?")) {
+          const memoObj = getPrevMemo();
+          delete memoObj[id];
+          localStorage.setItem("memo", JSON.stringify(memoObj));
+          drawPrevMemo();
+        }
+      }
+
+      function copyMemo(text) {
+        navigator.clipboard.writeText(text).then(() => {
+          copyToast.show();
+        });
       }
 
       function drawPrevMemo() {
-        // localStorage에서 데이터 빼오기
-        // let prevMemo;
-        // try {
-        //   prevMemo = JSON.parse(localStorage.getItem("memo"));
-        // } catch {
-        //   prevMemo = {};
-        // }
-        const prevMemo = getPrevMemo();
-        // timeKey : 메모값 -> 배열
-        console.log(prevMemo);
-        // 각각 메모 박스 그리기
-        // 기존에 만약에 memoList에 dom 요소가 있으면 그냥 둠
-        memoList.innerHTML = ""; // 다시 렌더링 시에는 한 번 비우게
-        for (const key in prevMemo) {
-          drawMemoBox(prevMemo[key], key);
+        const memoObj = getPrevMemo();
+        memoList.innerHTML = "";
+        
+        // 정렬: 1. 고정됨(Pinned), 2. 즐겨찾기(Favorite), 3. 시간 역순(최신순)
+        const sortedMemos = Object.entries(memoObj).sort((a, b) => {
+          const memoA = a[1];
+          const memoB = b[1];
+          
+          if (memoA.isPinned !== memoB.isPinned) return memoA.isPinned ? -1 : 1;
+          if (memoA.isFavorite !== memoB.isFavorite) return memoA.isFavorite ? -1 : 1;
+          
+          return Number(b[0]) - Number(a[0]);
+        });
+
+        if(sortedMemos.length === 0) {
+          memoList.innerHTML = `
+            <div class="col-12 text-center text-muted py-5 mt-4 border border-dashed rounded-4 bg-light">
+              <i class="bi bi-inbox display-3 d-block mb-3 text-secondary opacity-50"></i>
+              <p class="fs-5">작성된 메모가 없습니다.</p>
+              <p class="small">상단의 입력창을 이용해 첫 메모를 남겨보세요!</p>
+            </div>
+          `;
+          return;
+        }
+
+        for (const [key, memoData] of sortedMemos) {
+          drawMemoBox(key, memoData);
+        }
+      }
+
+      function drawMemoBox(id, memoData) {
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-6 col-lg-4 col-xl-3";
+        
+        // Pinned/Favorite 상태에 따른 테마 적용
+        let bgClass = "bg-memo-default";
+        if(memoData.isPinned) bgClass = "bg-memo-pinned";
+        else if(memoData.isFavorite) bgClass = "bg-memo-fav";
+
+        const pinIcon = memoData.isPinned ? "bi-pin-angle-fill" : "bi-pin-angle";
+        const pinColor = memoData.isPinned ? "active-pin" : "";
+        
+        const favIcon = memoData.isFavorite ? "bi-star-fill" : "bi-star";
+        const favColor = memoData.isFavorite ? "active-fav" : "";
+
+        const date = new Date(Number(id));
+        const dateString = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
+        col.innerHTML = `
+          <div class="card shadow-sm border rounded-4 ${bgClass} memo-card">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <small class="text-muted" style="font-size: 0.75rem;">${dateString}</small>
+                <div class="d-flex align-items-center bg-white rounded-pill px-2 py-1 shadow-sm border border-light">
+                  <button class="btn-icon ${favColor}" onclick="toggleFav('${id}', ${memoData.isFavorite})" title="즐겨찾기">
+                    <i class="bi ${favIcon}"></i>
+                  </button>
+                  <div class="vr mx-1 bg-secondary opacity-25" style="height:12px;"></div>
+                  <button class="btn-icon ${pinColor}" onclick="togglePin('${id}', ${memoData.isPinned})" title="상단 고정">
+                    <i class="bi ${pinIcon}"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-text memo-text mb-3 fs-6">${escapeHtml(memoData.text)}</div>
+              
+              <div class="d-flex justify-content-end mt-auto pt-3 border-top gap-2 align-items-center">
+                <button class="btn btn-sm btn-outline-secondary rounded-pill d-flex align-items-center px-3" onclick="copyMemoText('${id}')">
+                  <i class="bi bi-clipboard me-1"></i>복사
+                </button>
+                <button class="btn btn-sm btn-outline-danger rounded-pill d-flex align-items-center px-3" onclick="deleteMemoText('${id}')">
+                  <i class="bi bi-trash3 me-1"></i>삭제
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        memoList.append(col);
+      }
+      
+      // XSS 방지
+      function escapeHtml(unsafe) {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      // 전역 스코프 함수 노출
+      window.togglePin = function(id, currentState) {
+        updateMemoState(id, { isPinned: !currentState });
+      }
+      window.toggleFav = function(id, currentState) {
+        updateMemoState(id, { isFavorite: !currentState });
+      }
+      window.deleteMemoText = function(id) {
+        deleteMemo(id);
+      }
+      window.copyMemoText = function(id) {
+        const memoObj = getPrevMemo();
+        if(memoObj[id]) {
+          copyMemo(memoObj[id].text);
         }
       }
     </script>
