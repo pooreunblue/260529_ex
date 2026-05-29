@@ -215,34 +215,54 @@
       let copyToastEl, copyToast;
 
       function main() {
-        // 기존 문자열 데이터를 객체 형태로 마이그레이션
-        migrateData();
+        try {
+          // 기존 문자열 데이터를 객체 형태로 마이그레이션
+          migrateData();
+        } catch (e) {
+          console.error("Migration failed:", e);
+        }
         
-        copyToastEl = document.getElementById('copyToast');
-        copyToast = new bootstrap.Toast(copyToastEl, { delay: 2000 });
+        try {
+          copyToastEl = document.getElementById('copyToast');
+          copyToast = new bootstrap.Toast(copyToastEl, { delay: 2000 });
+        } catch (e) {
+          console.warn("Bootstrap Toast is not available:", e);
+        }
         
-        memoWriter.addEventListener("submit", memoWriterHandler);
-        resetBtn.addEventListener("click", () => {
-          if(confirm("모든 메모를 정말 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다.)")) {
-            localStorage.removeItem("memo");
-            drawPrevMemo();
-          }
-        });
+        if (memoWriter) {
+          memoWriter.addEventListener("submit", memoWriterHandler);
+        }
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            if(confirm("모든 메모를 정말 삭제하시겠습니까? (이 작업은 되돌릴 수 없습니다.)")) {
+              localStorage.removeItem("memo");
+              drawPrevMemo();
+            }
+          });
+        }
         
-        drawPrevMemo();
+        try {
+          drawPrevMemo();
+        } catch (e) {
+          console.error("drawPrevMemo failed:", e);
+        }
       }
 
       function migrateData() {
         const memoObj = getPrevMemo();
         let changed = false;
         for (const key in memoObj) {
-          if (typeof memoObj[key] === "string") {
+          if (typeof memoObj[key] === "string" || typeof memoObj[key] === "number") {
             memoObj[key] = {
-              text: memoObj[key],
+              text: String(memoObj[key]),
               isPinned: false,
               isFavorite: false
             };
             changed = true;
+          } else if (memoObj[key] && typeof memoObj[key] === "object" && memoObj[key].text === undefined) {
+             // 비정상 객체 구조 예외 처리
+             memoObj[key].text = "";
+             changed = true;
           }
         }
         if (changed) {
@@ -300,8 +320,19 @@
       }
 
       function copyMemo(text) {
-        navigator.clipboard.writeText(text).then(() => {
-          copyToast.show();
+        if (!navigator.clipboard) {
+          alert("클립보드 기능이 지원되지 않는 브라우저입니다.");
+          return;
+        }
+        navigator.clipboard.writeText(text || "").then(() => {
+          if (copyToast) {
+            copyToast.show();
+          } else {
+            alert("메모가 클립보드에 복사되었습니다.");
+          }
+        }).catch(err => {
+          console.error("Clipboard copy failed:", err);
+          alert("복사에 실패했습니다.");
         });
       }
 
@@ -388,7 +419,8 @@
       
       // XSS 방지
       function escapeHtml(unsafe) {
-        return unsafe
+        if (unsafe == null) return "";
+        return String(unsafe)
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
